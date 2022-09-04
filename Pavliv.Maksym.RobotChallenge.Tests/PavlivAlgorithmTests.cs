@@ -137,47 +137,47 @@ namespace Pavliv.Maksym.RobotChallenge.Tests
             _map.Stations[0].Position = prev;
         }
 
-        //[Test]
-        //[TestCase(1, 1, 3)]
-        //public void FindOptimalRoute_ReturnsRobotsPosition(int x, int y, int variant)
-        //{
-        //    var expectedPosition = new Position(x + 1, y);
+        [Test]
+        [TestCase(1, 1, 3)]
+        public void FindOptimalRoute_ReturnsRobotsPosition(int x, int y, int variant)
+        {
+            var expectedPosition = new Position(x + 1, y);
 
-        //    var positions = new List<Position>
-        //    {
-        //        new Position(x + 1, y),
-        //        new Position(x, y + 1),
-        //        new Position(x - 1, y),
-        //        new Position(x, y - 1)
-        //    };
+            var positions = new List<Position>
+            {
+                new Position(x + 1, y),
+                new Position(x, y + 1),
+                new Position(x - 1, y),
+                new Position(x, y - 1)
+            };
 
-        //    var robots = new List<CRobot>
-        //    {
-        //        new CRobot()
-        //        {
-        //            Energy = 60,
-        //            OwnerName = "Test",
-        //            Position = new Position(x + 10, y + 10)
-        //        },
-        //        new CRobot()
-        //        {
-        //            Energy = 1000,
-        //            OwnerName = "Test",
-        //            Position = expectedPosition
-        //        },
-        //        new CRobot()
-        //        {
-        //            Energy = 500,
-        //            OwnerName = "Pavliv Maksym",
-        //            Position = new Position(x, y)
-        //        }
-        //    };
+            var robots = new List<CRobot>
+            {
+                new CRobot()
+                {
+                    Energy = 60,
+                    OwnerName = "Test",
+                    Position = new Position(x + 10, y + 10)
+                },
+                new CRobot()
+                {
+                    Energy = 1000,
+                    OwnerName = "Test",
+                    Position = expectedPosition
+                },
+                new CRobot()
+                {
+                    Energy = 500,
+                    OwnerName = "Pavliv Maksym",
+                    Position = new Position(x, y)
+                }
+            };
 
-        //    var alg = new PavlivAlgorithm();
-        //    var actual = alg.FindOptimalRoute(positions, robots, 2, _map);
+            var alg = new PavlivAlgorithm();
+            var actual = alg.FindOptimalRoute(positions, robots, 2, _map);
 
-        //    Assert.That(actual, Is.EqualTo(expectedPosition));
-        //}
+            Assert.That(actual, Is.EqualTo(expectedPosition));
+        }
 
         [Test]
         public void DoStep_RobotIsOnStation_ReturnsCollectEnergy()

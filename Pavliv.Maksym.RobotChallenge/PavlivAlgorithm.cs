@@ -160,6 +160,6 @@ namespace Pavliv.Maksym.RobotChallenge
             return robotBestToAttack == null ? optimalPosition : robotBestToAttack.Position;
         }
 
-        public string Author => "Pavliv Maksym SECOND";
+        public string Author => "Pavliv Maksym";
     }
 }

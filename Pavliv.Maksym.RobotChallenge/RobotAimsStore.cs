@@ -5,7 +5,7 @@ using Robot.Common;
 
 namespace Pavliv.Maksym.RobotChallenge
 {
-    internal class RobotAimsStore
+    public class RobotAimsStore
     {
         private static readonly Lazy<RobotAimsStore> s_store = new Lazy<RobotAimsStore>(() => new RobotAimsStore());
         private readonly Dictionary<Robot.Common.Robot, Position> _aims;
