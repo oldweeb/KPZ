@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Robot.Common;
 
@@ -14,40 +13,75 @@ namespace Pavliv.Maksym.RobotChallenge
         private const int MinEnergyBonus = 50;
         private const int MaxEnergyBonus = 100;
         private const int NewRobotPrice = 200;
-        private const int MinAllowedEnergy = 600;
-        private const int NewRobotEnergy = 400;
-        private const int MaxRobotCount = 30;
-        private const int OffsetX = 2;
-        private const int OffsetY = 2;
+        private const int MinAllowedEnergy = 800;
+        private const int NewRobotEnergy = 600;
+        private const int OffsetX = 4;
+        private const int OffsetY = 4;
         private int _roundCounter = 0;
         private int _myRobotCount = 10;
 
+        private readonly RobotAimsStore _store;
+
+
+        private void IncrementRoundCounter(object sender, LogRoundEventArgs e) 
+        {
+            _roundCounter++;
+        }
+
         public PavlivAlgorithm()
         {
-            Logger.OnLogRound += (sender, e) => _roundCounter++;
+            Logger.OnLogRound += IncrementRoundCounter;
+            _store = RobotAimsStore.GetStore();
         }
+
+        public int MaxMyRobotCount { get; set; } = 20;
+        public int Phase2MaxMyRobotCount { get; set; } = 80;
+        public int EnoughRoundCount { get; set; } = 10;
+        public int Phase2StartRound { get; set; } = 35;
 
         public RobotCommand DoStep(IList<CRobot> robots, int robotToMoveIndex, Map map)
         {
+            MaxMyRobotCount = map.Stations.Count / 2;
+            Phase2MaxMyRobotCount = (int)(map.Stations.Count / 1.5);
             CRobot robot = robots[robotToMoveIndex];
-            if (_myRobotCount < MaxRobotCount && robot.Energy >= MinAllowedEnergy && robot.IsOnStation(map, out _))
+            
+            if (_roundCounter >= EnoughRoundCount &&
+                _roundCounter < 40 &&
+                _myRobotCount < MaxMyRobotCount &&
+                _myRobotCount < 100 &&
+                robot.Energy >= MinAllowedEnergy &&
+                robot.IsOnStation(map, out _))
             {
                 _myRobotCount++;
                 return new CreateNewRobotCommand()
                 {
                     Description = "Not enough robots. Create new",
-                    NewRobotEnergy = PavlivAlgorithm.NewRobotEnergy
+                    NewRobotEnergy = NewRobotEnergy
                 };
             }
 
-            if (robot.IsOnStation(map, out EnergyStation currentStation))
+            if (_roundCounter >= Phase2StartRound && 
+                _roundCounter < 40 &&
+                robot.IsOnStation(map, out _) && 
+                _myRobotCount < Phase2MaxMyRobotCount && 
+                _myRobotCount < 100 &&
+                robot.Energy >= MinAllowedEnergy)
+            {
+                _myRobotCount++;
+                return new CreateNewRobotCommand()
+                {
+                    Description = "Not enought robots. Phase 2. Create new",
+                    NewRobotEnergy = NewRobotEnergy
+                };
+            }
+            
+            if (robot.IsOnStation(map, out _))
             {
                 return new CollectEnergyCommand()
                 {
                     Description = "Decided to collect energy"
                 };
             }
-
             Position oldPosition = robot.Position;
             List<Position> availablePositions = map.GetCellsWithOffset(oldPosition, OffsetX, OffsetY).ToList();
             Position newPosition = FindOptimalRoute(availablePositions, robots, robotToMoveIndex, map);
@@ -59,7 +93,7 @@ namespace Pavliv.Maksym.RobotChallenge
             };
         }
 
-        private bool IsCellOccupied(Position pos, IList<CRobot> robots, int robotToMoveIndex, out CRobot occupant)
+        public bool IsCellOccupied(Position pos, IList<CRobot> robots, int robotToMoveIndex, out CRobot occupant)
         {
             CRobot robot = robots[robotToMoveIndex];
 
@@ -75,7 +109,7 @@ namespace Pavliv.Maksym.RobotChallenge
             return false;
         }
 
-        private Position FindOptimalRoute(
+        public Position FindOptimalRoute(
             List<Position> positions, 
             IList<CRobot> robots, 
             int robotToMoveIndex,
@@ -87,11 +121,11 @@ namespace Pavliv.Maksym.RobotChallenge
             Position optimalPosition = null;
             EnergyStation optimalStation = null;
 
-            positions.ForEach(pos =>
+            positions.ToList().ForEach(pos =>
             {
                 if (IsCellOccupied(pos, robots, robotToMoveIndex, out CRobot occupant))
                 {
-                    if (occupant.OwnerName != robot.OwnerName)
+                    if (occupant.OwnerName != robot.OwnerName && occupant.Energy * StealRate >= AttackLoss)
                     {
                         robotBestToAttack = robotBestToAttack != null &&
                                             robotBestToAttack.Energy * StealRate > occupant.Energy * StealRate
@@ -107,7 +141,7 @@ namespace Pavliv.Maksym.RobotChallenge
                 while (!(stations = map.GetNearbyResources(pos, OffsetX + tryCounter).Where(st =>
                        {
                            bool isOccupied = IsCellOccupied(st.Position, robots, robotToMoveIndex, out CRobot putin);
-                           return !isOccupied || putin.OwnerName != robot.OwnerName;
+                           return (!isOccupied || putin.OwnerName != robot.OwnerName) && !_store.IsOccupied(st.Position);
                        }).ToList()).Any())
                 {
                     tryCounter++;
@@ -119,12 +153,13 @@ namespace Pavliv.Maksym.RobotChallenge
                 {
                     optimalPosition = pos;
                     optimalStation = closestStation;
+                    _store.SetAim(robot, optimalPosition);
                 }
             });
 
             return robotBestToAttack == null ? optimalPosition : robotBestToAttack.Position;
         }
 
-        public string Author => "Pavliv Maksym";
+        public string Author => "Pavliv Maksym SECOND";
     }
 }

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pavliv.Maksym.RobotChallenge</RootNamespace>
-    <AssemblyName>Pavliv.Maksym.RobotChallenge</AssemblyName>
+    <AssemblyName>Pavliv.Maksym.RobotChallenge.PHASE2</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IvanochkoDaniel.RobotChallenge">
+      <HintPath>..\RobotChallenge\AlgorithmDlls\IvanochkoDaniel.RobotChallenge.dll</HintPath>
+    </Reference>
     <Reference Include="Robot.Common">
       <HintPath>..\RobotChallenge\Robot.Common.dll</HintPath>
     </Reference>
@@ -46,8 +49,10 @@
   <ItemGroup>
     <Compile Include="DistanceHelper.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="PathCalculator.cs" />
     <Compile Include="PavlivAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RobotAimsStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

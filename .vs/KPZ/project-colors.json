@@ -10,7 +10,17 @@
       "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
       "DisplayName": "Miscellaneous Files",
       "ColorIndex": -1
+    },
+    "75a91527-a85c-45e9-9da7-36432385400f": {
+      "ProjectGuid": "75a91527-a85c-45e9-9da7-36432385400f",
+      "DisplayName": "Pavliv.Maksym.RobotChallenge.Tests",
+      "ColorIndex": 1
+    },
+    "9f5ced6f-c302-402c-a64b-679946988e24": {
+      "ProjectGuid": "9f5ced6f-c302-402c-a64b-679946988e24",
+      "DisplayName": "Pavliv.Maksym.RobotChallenge.Tests",
+      "ColorIndex": 2
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 3
 }

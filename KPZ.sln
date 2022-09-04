@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pavliv.Maksym.RobotChallenge", "Pavliv.Maksym.RobotChallenge\Pavliv.Maksym.RobotChallenge.csproj", "{03EBBF6F-15E4-4D7D-8FB7-DDD8BED16D7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pavliv.Maksym.RobotChallenge.Tests", "Pavliv.Maksym.RobotChallenge.Tests\Pavliv.Maksym.RobotChallenge.Tests.csproj", "{9F5CED6F-C302-402C-A64B-679946988E24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{03EBBF6F-15E4-4D7D-8FB7-DDD8BED16D7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03EBBF6F-15E4-4D7D-8FB7-DDD8BED16D7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03EBBF6F-15E4-4D7D-8FB7-DDD8BED16D7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F5CED6F-C302-402C-A64B-679946988E24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F5CED6F-C302-402C-A64B-679946988E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F5CED6F-C302-402C-A64B-679946988E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F5CED6F-C302-402C-A64B-679946988E24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

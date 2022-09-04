@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Robot.Common;
@@ -26,6 +25,16 @@ namespace Pavliv.Maksym.RobotChallenge
 
             station = null;
             return false;
+        }
+
+        public static CRobot GetCopy(this CRobot robot)
+        {
+            return new CRobot()
+            {
+                Energy = robot.Energy,
+                OwnerName = robot.OwnerName,
+                Position = new Position(robot.Position.X, robot.Position.Y)
+            };
         }
 
         #endregion
