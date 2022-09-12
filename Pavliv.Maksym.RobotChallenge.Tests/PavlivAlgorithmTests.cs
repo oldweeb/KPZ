@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using NUnit.Framework;
 using Robot.Common;
 using CRobot = Robot.Common.Robot;
@@ -229,6 +230,38 @@ namespace Pavliv.Maksym.RobotChallenge.Tests
             RobotCommand command = alg.DoStep(robots, 1, _map);
             Assert.That(command, Is.InstanceOf<CreateNewRobotCommand>());
         }
+
+        [Test]
+        public void DoStep_Phase2_ReturnsCreateRobotPhase2()
+        {
+            var alg = new PavlivAlgorithm();
+            for (var i = 0; i < 35; ++i)
+            {
+                Logger.LogRound(i);
+            }
+
+            var robots = new List<CRobot>()
+            {
+                new CRobot()
+                {
+                    Energy = 500,
+                    OwnerName = "Text",
+                    Position = new Position(10, 10)
+                },
+                new CRobot()
+                {
+                    Energy = 1000,
+                    OwnerName = "Pavliv Maksym",
+                    Position = _map.Stations[0].Position
+                }
+            };
+
+            RobotCommand command = alg.DoStep(robots, 1, _map);
+            Assert.That(command, Is.InstanceOf<CreateNewRobotCommand>());
+            Assert.That(command.Description, Is.EqualTo("Not enought robots. Phase 2. Create new"));
+        }
+
+        [Test]
 
         public void DoStep_NotEnoughEnergyNotOnStation_ReturnsMove()
         {

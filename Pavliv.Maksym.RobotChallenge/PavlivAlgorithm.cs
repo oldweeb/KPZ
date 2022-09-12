@@ -46,7 +46,7 @@ namespace Pavliv.Maksym.RobotChallenge
             CRobot robot = robots[robotToMoveIndex];
             
             if (_roundCounter >= EnoughRoundCount &&
-                _roundCounter < 40 &&
+                _roundCounter < Phase2StartRound &&
                 _myRobotCount < MaxMyRobotCount &&
                 _myRobotCount < 100 &&
                 robot.Energy >= MinAllowedEnergy &&
@@ -141,7 +141,7 @@ namespace Pavliv.Maksym.RobotChallenge
                 while (!(stations = map.GetNearbyResources(pos, OffsetX + tryCounter).Where(st =>
                        {
                            bool isOccupied = IsCellOccupied(st.Position, robots, robotToMoveIndex, out CRobot putin);
-                           return (!isOccupied || putin.OwnerName != robot.OwnerName) && !_store.IsOccupied(st.Position);
+                           return (!isOccupied || putin.OwnerName != robot.OwnerName);
                        }).ToList()).Any())
                 {
                     tryCounter++;
@@ -153,7 +153,7 @@ namespace Pavliv.Maksym.RobotChallenge
                 {
                     optimalPosition = pos;
                     optimalStation = closestStation;
-                    _store.SetAim(robot, optimalPosition);
+                    //_store.SetAim(robot, optimalPosition);
                 }
             });
 

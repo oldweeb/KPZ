@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pavliv.Maksym.RobotChallenge</RootNamespace>
-    <AssemblyName>Pavliv.Maksym.RobotChallenge.PHASE2</AssemblyName>
+    <AssemblyName>Pavliv.Maksym.RobotChallenge</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="DistanceHelper.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="PathCalculator.cs" />
     <Compile Include="PavlivAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RobotAimsStore.cs" />
