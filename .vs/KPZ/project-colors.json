@@ -20,7 +20,27 @@
       "ProjectGuid": "9f5ced6f-c302-402c-a64b-679946988e24",
       "DisplayName": "Pavliv.Maksym.RobotChallenge.Tests",
       "ColorIndex": 2
+    },
+    "510c6414-f309-48cb-98aa-fb3b2ad76117": {
+      "ProjectGuid": "510c6414-f309-48cb-98aa-fb3b2ad76117",
+      "DisplayName": "Model",
+      "ColorIndex": 3
+    },
+    "cf92de9c-cdf9-4cde-9a27-883c74d6ab7f": {
+      "ProjectGuid": "cf92de9c-cdf9-4cde-9a27-883c74d6ab7f",
+      "DisplayName": "Schedule.ViewModel",
+      "ColorIndex": 4
+    },
+    "a6ae8965-9576-434d-9f7c-adce29f049e3": {
+      "ProjectGuid": "a6ae8965-9576-434d-9f7c-adce29f049e3",
+      "DisplayName": "Schedule.UI",
+      "ColorIndex": 5
+    },
+    "5635ea4c-294a-47bb-a743-24b105a9aee7": {
+      "ProjectGuid": "5635ea4c-294a-47bb-a743-24b105a9aee7",
+      "DisplayName": "Schedule.Model",
+      "ColorIndex": 6
     }
   },
-  "NextColorIndex": 3
+  "NextColorIndex": 7
 }
