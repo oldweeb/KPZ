@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
@@ -55,9 +57,7 @@ namespace Schedule.UI.ViewModel
         {
             get
             {
-                _professors ??= new ObservableCollection<UserViewModel>(_repository
-                    .GetUsers(u => u.Position is Position.Assistant or Position.Professor)
-                    .Select(_mapper.Map<UserViewModel>));
+                _professors ??= new ObservableCollection<UserViewModel>(_users.Where(u => u.Position is Position.Assistant or Position.Professor));
                 return _professors;
             }
             set
@@ -86,8 +86,18 @@ namespace Schedule.UI.ViewModel
         {
             get
             {
-                _users ??= new ObservableCollection<UserViewModel>(_repository.GetUsers()
-                    .Select(_mapper.Map<UserViewModel>));
+                if (_users is null)
+                {
+                    _users = new ObservableCollection<UserViewModel>(_repository.GetUsers()
+                        .Select(_mapper.Map<UserViewModel>));
+                    _users.CollectionChanged += HandleUsersCollectionChanged;
+                    foreach (var userViewModel in _users)
+                    {
+                        userViewModel.PropertyChanged -= HandleUserPropertyChange;
+                        userViewModel.PropertyChanged += HandleUserPropertyChange;
+                    }
+                }
+                
                 return _users;
             }
             set
@@ -97,12 +107,13 @@ namespace Schedule.UI.ViewModel
             }
         }
 
+        
+
         public ObservableCollection<UserViewModel> Students
         {
             get
             {
-                _students ??= new ObservableCollection<UserViewModel>(_repository
-                    .GetUsers(u => u.Position == Position.Student).Select(_mapper.Map<UserViewModel>));
+                _students ??= new ObservableCollection<UserViewModel>(Users.Where(u => u.Position is Position.Student));
                 return _students;
             }
             set
@@ -203,6 +214,28 @@ namespace Schedule.UI.ViewModel
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+
+        private void HandleUserPropertyChange(object? sender, PropertyChangedEventArgs e)
+        {
+            var user = sender as UserViewModel;
+            Professors.RemoveIf(p => (p.Position != Position.Assistant && p.Position != Position.Professor));
+            Students.RemoveIf(s => s.Position != Position.Student);
+            Professors.AddIf(_users, u => !Professors.Contains(u) && (u.Position is Position.Assistant or Position.Professor));
+            Students.AddIf(_users, u => !Students.Contains(u) && u.Position == Position.Student);
+        }
+
+        private void HandleUsersCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+        {
+            Professors.AddIf(_users, u => !Professors.Contains(u) && u.Position is Position.Assistant or Position.Professor);
+            Students.AddIf(_users, u => !Students.Contains(u) && u.Position is Position.Student);
+
+            foreach (object item in args.NewItems)
+            {
+                var user = item as UserViewModel;
+                user.PropertyChanged += HandleUserPropertyChange;
+            }
         }
     }
 }

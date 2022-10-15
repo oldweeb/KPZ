@@ -28,6 +28,7 @@
         </ObjectDataProvider>
         <converters:UserNameConverter x:Key="UserNameConverter" />
         <converters:GroupMembersConverter x:Key="GroupMembersConverter" />
+        <converters:StudentsFromUsersConverter x:Key="StudentsFromUsersConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -71,7 +72,7 @@
                 <DataGridTextColumn Header="Last Name" Width="*" Binding="{Binding LastName}" />
                 <DataGridTextColumn Header="Email" Width="*" Binding="{Binding Email}" />
                 <DataGridTextColumn Header="Password" Width="*" Binding="{Binding Password}" />
-                <DataGridComboBoxColumn Header="Position" ItemsSource="{Binding Source={StaticResource UserRoleEnum}}" SelectedItemBinding="{Binding Position, Mode=TwoWay}" />
+                <DataGridComboBoxColumn Header="Position" ItemsSource="{Binding Source={StaticResource UserRoleEnum}, UpdateSourceTrigger=PropertyChanged}" SelectedItemBinding="{Binding Position, Mode=TwoWay}" />
             </DataGrid.Columns>
         </DataGrid>
         <DataGrid Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Groups}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedGroup}">
@@ -88,7 +89,7 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <ListBox ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" Grid.Row="1" Margin="10" />
+            <ListBox ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}"  Grid.Row="1" Margin="10" />
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />

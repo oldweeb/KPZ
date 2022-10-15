@@ -27,7 +27,7 @@ public partial class App : Application
             .ConfigureServices(services =>
             {
                 var json = File.ReadAllText(GlobalConfiguration.DataPath);
-                services.AddScoped<IRepository, HardCodedRepository>(_ => JsonConvert.DeserializeObject<HardCodedRepository>(json));
+                services.AddTransient<IRepository, HardCodedRepository>();
                 services.AddSingleton<IMapper>(Mapping.Create());
                 services.AddTransient<LoginWindow>();
                 services.AddTransient<LoginViewModel>();
