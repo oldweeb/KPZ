@@ -29,5 +29,7 @@ public enum Position
     [EnumMember]
     Assistant,
     [EnumMember]
-    Student
+    Student,
+    [EnumMember]
+    SystemAdministrator
 }

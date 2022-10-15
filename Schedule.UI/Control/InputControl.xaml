@@ -9,6 +9,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:AlignmentConverter x:Key="AlignmentConverter" />
+        <Style TargetType="{x:Type PasswordBox}">
+            <EventSetter Event="PasswordChanged" Handler="PasswordBox_OnPasswordChanged"></EventSetter>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>

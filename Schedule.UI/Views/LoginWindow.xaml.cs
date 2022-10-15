@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using Schedule.UI.Repositories;
-using Schedule.UI.ViewModel;
+﻿using System.Windows;
 
 namespace Schedule.UI.Views
 {

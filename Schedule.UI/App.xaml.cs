@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Schedule.Model;
@@ -22,7 +23,7 @@ public partial class App : Application
     public App()
     {
         Host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder()
-            .ConfigureServices((hostContext, services) =>
+            .ConfigureServices(services =>
             {
                 services.AddScoped<IRepository, HardCodedRepository>();
                 services.AddScoped<IViewModelRepository, HardCodedViewModelRepository>();
@@ -30,6 +31,9 @@ public partial class App : Application
                 services.AddTransient<LoginWindow>();
                 services.AddTransient<LoginViewModel>();
                 services.AddTransient<StudentWindow>();
+                services.AddTransient<StudentViewModel>();
+                services.AddTransient<ProfessorWindow>();
+                services.AddTransient<ProfessorViewModel>();
             }).Build();
     }
 

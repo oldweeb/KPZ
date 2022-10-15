@@ -3,11 +3,11 @@
 namespace Schedule.UI.Views
 {
     /// <summary>
-    /// Interaction logic for StudentWindow.xaml
+    /// Interaction logic for ProfessorWindow.xaml
     /// </summary>
-    public partial class StudentWindow : Window
+    public partial class ProfessorWindow : Window
     {
-        public StudentWindow()
+        public ProfessorWindow()
         {
             InitializeComponent();
         }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using AutoMapper;
@@ -51,13 +48,18 @@ public class LoginViewModel : ViewModelBase
         {
             _login ??= new RelayCommand(
                 _ => HandleLogin(),
-                _ => !String.IsNullOrEmpty(_email) && !String.IsNullOrEmpty(_password));
+                _ => CanLogin());
 
             return _login;
         }
     }
 
     public LoginWindow CurrentWindow { get; set; }
+
+    private bool CanLogin()
+    {
+        return !String.IsNullOrEmpty(_email) && !String.IsNullOrEmpty(_password);
+    }
 
     private void HandleLogin()
     {
@@ -68,15 +70,30 @@ public class LoginViewModel : ViewModelBase
             return;
         }
 
+        IServiceProvider services = App.Services!;
+        var mapper = services.GetRequiredService<IMapper>();
+        var userVM = mapper.Map<UserViewModel>(user);
+
+        Window window;
+
         if (user.Position == Position.Student)
         {
-            var mapper = App.Services!.GetRequiredService<IMapper>();
-            var studentWindow = App.Services!.GetRequiredService<StudentWindow>();
-            var userVM = mapper.Map<UserViewModel>(user);
-            studentWindow.DataContext = userVM;
-            studentWindow.Show();
-            CurrentWindow.Close();
-            return;
+            window = services.GetRequiredService<StudentWindow>();
+            var studentVM = services.GetRequiredService<StudentViewModel>();
+            studentVM.Student = userVM;
+            studentVM.CurrentWindow = window;
+            window.DataContext = studentVM;
         }
+        else
+        {
+            window = services.GetRequiredService<ProfessorWindow>();
+            var professorVM = services.GetRequiredService<ProfessorViewModel>();
+            professorVM.Professor = userVM;
+            professorVM.CurrentWindow = window;
+            window.DataContext = professorVM;
+        }
+
+        window.Show();
+        CurrentWindow.Close();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Schedule.Model;
 
@@ -57,6 +58,14 @@ internal class HardCodedRepository : IRepository
                 LastName = "Vovchanyk",
                 Email = "trata@test.com",
                 Password = "123qwe123"
+            },
+            new User()
+            {
+                Id = 6,
+                Position = Position.SystemAdministrator,
+                LastName = "admin",
+                Email = "admin",
+                Password = "admin"
             }
         };
 
@@ -92,7 +101,8 @@ internal class HardCodedRepository : IRepository
                 Name = "KPZ",
                 Order = 2,
                 Professor = _users[2],
-                Type = EventType.Lecture
+                Type = EventType.Lecture,
+                DayOfWeek = DayOfWeek.Monday
             },
             new Event()
             {
@@ -101,7 +111,8 @@ internal class HardCodedRepository : IRepository
                 Name = "PE",
                 Order = 5,
                 Professor = _users[3],
-                Type = EventType.Practice
+                Type = EventType.Practice,
+                DayOfWeek = DayOfWeek.Wednesday
             },
             new Event()
             {
@@ -110,7 +121,8 @@ internal class HardCodedRepository : IRepository
                 Name = "C#",
                 Order = 3,
                 Professor = _users[2],
-                Type = EventType.Lab
+                Type = EventType.Lab,
+                DayOfWeek = DayOfWeek.Wednesday
             },
             new Event()
             {
@@ -119,7 +131,8 @@ internal class HardCodedRepository : IRepository
                 Name = "Operation Research",
                 Order = 2,
                 Professor = _users[3],
-                Type = EventType.Practice
+                Type = EventType.Practice,
+                DayOfWeek = DayOfWeek.Thursday
             }
         };
     }
@@ -134,19 +147,19 @@ internal class HardCodedRepository : IRepository
         };
     }
 
-    public IEnumerable<Event> GetEvents()
+    public IEnumerable<Event> GetEvents(Func<Event, bool>? predicate = null)
     {
-        return _events;
+        return predicate != null ? _events.Where(predicate) : _events;
     }
 
-    public IEnumerable<Group> GetGroups()
+    public IEnumerable<Group> GetGroups(Func<Group, bool>? predicate = null)
     {
-        return _groups;
+        return predicate != null ? _groups.Where(predicate) : _groups;
     }
 
-    public IEnumerable<User> GetUsers()
+    public IEnumerable<User> GetUsers(Func<User, bool>? predicate = null)
     {
-        return _users;
+        return predicate != null ? _users.Where(predicate) : _users;
     }
 
     public IEnumerable<User> GetStudents()

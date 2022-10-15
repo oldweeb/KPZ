@@ -43,13 +43,13 @@ public class EventViewModel : ViewModelBase
         }
     }
 
-    public UserViewModel User
+    public UserViewModel Professor
     {
         get => _user;
         set
         {
             _user = value;
-            OnPropertyChanged(nameof(User));
+            OnPropertyChanged(nameof(Professor));
         }
     }
 

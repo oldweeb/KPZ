@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Schedule.Model\Schedule.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+
 </Project>
