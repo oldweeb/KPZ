@@ -1,0 +1,252 @@
+{
+  "users": [
+    {
+      "Id": 1,
+      "FirstName": "Maksym",
+      "LastName": "Pavliv",
+      "MiddleName": null,
+      "Position": 2,
+      "Email": "maxvill2016@gmail.com",
+      "Password": "Unga bunga"
+    },
+    {
+      "Id": 2,
+      "FirstName": null,
+      "LastName": "Tratatov",
+      "MiddleName": null,
+      "Position": 2,
+      "Email": "maksym.pavliv.pz.2020@lpnu.ua",
+      "Password": "ungabunga 2"
+    },
+    {
+      "Id": 3,
+      "FirstName": null,
+      "LastName": "Test",
+      "MiddleName": "Professorovych",
+      "Position": 0,
+      "Email": "test@test.com",
+      "Password": "lolkektratata"
+    },
+    {
+      "Id": 4,
+      "FirstName": "Gubka",
+      "LastName": "Bob",
+      "MiddleName": null,
+      "Position": 1,
+      "Email": "test@test2.com",
+      "Password": "12345678"
+    },
+    {
+      "Id": 5,
+      "FirstName": "Mykhailo",
+      "LastName": "Vovchanyk",
+      "MiddleName": null,
+      "Position": 2,
+      "Email": "trata@test.com",
+      "Password": "123qwe123"
+    },
+    {
+      "Id": 6,
+      "FirstName": null,
+      "LastName": "admin",
+      "MiddleName": null,
+      "Position": 3,
+      "Email": "admin",
+      "Password": "admin"
+    }
+  ],
+  "groups": [
+    {
+      "Id": 1,
+      "Students": [
+        {
+          "Id": 5,
+          "FirstName": "Mykhailo",
+          "LastName": "Vovchanyk",
+          "MiddleName": null,
+          "Position": 2,
+          "Email": "trata@test.com",
+          "Password": "123qwe123"
+        },
+        {
+          "Id": 1,
+          "FirstName": "Maksym",
+          "LastName": "Pavliv",
+          "MiddleName": null,
+          "Position": 2,
+          "Email": "maxvill2016@gmail.com",
+          "Password": "Unga bunga"
+        }
+      ],
+      "Name": "PZ-32"
+    },
+    {
+      "Id": 2,
+      "Students": [
+        {
+          "Id": 2,
+          "FirstName": null,
+          "LastName": "Tratatov",
+          "MiddleName": null,
+          "Position": 2,
+          "Email": "maksym.pavliv.pz.2020@lpnu.ua",
+          "Password": "ungabunga 2"
+        }
+      ],
+      "Name": "PZ-41"
+    }
+  ],
+  "events": [
+    {
+      "Id": 1,
+      "Order": 2,
+      "Professor": {
+        "Id": 3,
+        "FirstName": null,
+        "LastName": "Test",
+        "MiddleName": "Professorovych",
+        "Position": 0,
+        "Email": "test@test.com",
+        "Password": "lolkektratata"
+      },
+      "Group": {
+        "Id": 1,
+        "Students": [
+          {
+            "Id": 5,
+            "FirstName": "Mykhailo",
+            "LastName": "Vovchanyk",
+            "MiddleName": null,
+            "Position": 2,
+            "Email": "trata@test.com",
+            "Password": "123qwe123"
+          },
+          {
+            "Id": 1,
+            "FirstName": "Maksym",
+            "LastName": "Pavliv",
+            "MiddleName": null,
+            "Position": 2,
+            "Email": "maxvill2016@gmail.com",
+            "Password": "Unga bunga"
+          }
+        ],
+        "Name": "PZ-32"
+      },
+      "Type": 1,
+      "Name": "KPZ",
+      "DayOfWeek": 1
+    },
+    {
+      "Id": 2,
+      "Order": 5,
+      "Professor": {
+        "Id": 4,
+        "FirstName": "Gubka",
+        "LastName": "Bob",
+        "MiddleName": null,
+        "Position": 1,
+        "Email": "test@test2.com",
+        "Password": "12345678"
+      },
+      "Group": {
+        "Id": 1,
+        "Students": [
+          {
+            "Id": 5,
+            "FirstName": "Mykhailo",
+            "LastName": "Vovchanyk",
+            "MiddleName": null,
+            "Position": 2,
+            "Email": "trata@test.com",
+            "Password": "123qwe123"
+          },
+          {
+            "Id": 1,
+            "FirstName": "Maksym",
+            "LastName": "Pavliv",
+            "MiddleName": null,
+            "Position": 2,
+            "Email": "maxvill2016@gmail.com",
+            "Password": "Unga bunga"
+          }
+        ],
+        "Name": "PZ-32"
+      },
+      "Type": 2,
+      "Name": "PE",
+      "DayOfWeek": 3
+    },
+    {
+      "Id": 3,
+      "Order": 3,
+      "Professor": {
+        "Id": 3,
+        "FirstName": null,
+        "LastName": "Test",
+        "MiddleName": "Professorovych",
+        "Position": 0,
+        "Email": "test@test.com",
+        "Password": "lolkektratata"
+      },
+      "Group": {
+        "Id": 1,
+        "Students": [
+          {
+            "Id": 5,
+            "FirstName": "Mykhailo",
+            "LastName": "Vovchanyk",
+            "MiddleName": null,
+            "Position": 2,
+            "Email": "trata@test.com",
+            "Password": "123qwe123"
+          },
+          {
+            "Id": 1,
+            "FirstName": "Maksym",
+            "LastName": "Pavliv",
+            "MiddleName": null,
+            "Position": 2,
+            "Email": "maxvill2016@gmail.com",
+            "Password": "Unga bunga"
+          }
+        ],
+        "Name": "PZ-32"
+      },
+      "Type": 0,
+      "Name": "C#",
+      "DayOfWeek": 3
+    },
+    {
+      "Id": 4,
+      "Order": 2,
+      "Professor": {
+        "Id": 4,
+        "FirstName": "Gubka",
+        "LastName": "Bob",
+        "MiddleName": null,
+        "Position": 1,
+        "Email": "test@test2.com",
+        "Password": "12345678"
+      },
+      "Group": {
+        "Id": 2,
+        "Students": [
+          {
+            "Id": 2,
+            "FirstName": null,
+            "LastName": "Tratatov",
+            "MiddleName": null,
+            "Position": 2,
+            "Email": "maksym.pavliv.pz.2020@lpnu.ua",
+            "Password": "ungabunga 2"
+          }
+        ],
+        "Name": "PZ-41"
+      },
+      "Type": 2,
+      "Name": "Operation Research",
+      "DayOfWeek": 4
+    }
+  ]
+}

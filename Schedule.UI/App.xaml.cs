@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using AutoMapper;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Schedule.Model;
 using Schedule.UI.Mapper;
 using Schedule.UI.Repositories;
@@ -25,8 +26,8 @@ public partial class App : Application
         Host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
             {
-                services.AddScoped<IRepository, HardCodedRepository>();
-                services.AddScoped<IViewModelRepository, HardCodedViewModelRepository>();
+                var json = File.ReadAllText(GlobalConfiguration.DataPath);
+                services.AddScoped<IRepository, HardCodedRepository>(_ => JsonConvert.DeserializeObject<HardCodedRepository>(json));
                 services.AddSingleton<IMapper>(Mapping.Create());
                 services.AddTransient<LoginWindow>();
                 services.AddTransient<LoginViewModel>();
@@ -34,6 +35,8 @@ public partial class App : Application
                 services.AddTransient<StudentViewModel>();
                 services.AddTransient<ProfessorWindow>();
                 services.AddTransient<ProfessorViewModel>();
+                services.AddTransient<SystemAdministratorWindow>();
+                services.AddTransient<SystemAdministratorViewModel>();
             }).Build();
     }
 

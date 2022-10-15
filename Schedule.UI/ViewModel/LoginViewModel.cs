@@ -84,6 +84,14 @@ public class LoginViewModel : ViewModelBase
             studentVM.CurrentWindow = window;
             window.DataContext = studentVM;
         }
+        else if (user.Position == Position.SystemAdministrator)
+        {
+            window = services.GetRequiredService<SystemAdministratorWindow>();
+            var adminVM = services.GetRequiredService<SystemAdministratorViewModel>();
+            adminVM.CurrentWindow = window;
+            window.DataContext = adminVM;
+            adminVM.SystemAdministrator = userVM;
+        }
         else
         {
             window = services.GetRequiredService<ProfessorWindow>();

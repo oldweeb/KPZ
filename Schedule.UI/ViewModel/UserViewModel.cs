@@ -81,4 +81,24 @@ public class UserViewModel : ViewModelBase
             OnPropertyChanged(nameof(Password));
         }
     }
+
+    public override string ToString()
+    {
+        return $"#{Id} {LastName} {FirstName} {MiddleName}";
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is not UserViewModel user)
+        {
+            return false;
+        }
+
+        return user.Id == Id;
+    }
 }

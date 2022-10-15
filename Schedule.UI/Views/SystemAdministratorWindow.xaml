@@ -4,9 +4,101 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Schedule.UI.Views"
+        xmlns:controls="clr-namespace:Schedule.UI.Control"
+        xmlns:converters="clr-namespace:Schedule.UI.Converters"
+        xmlns:System="clr-namespace:System;assembly=System.Runtime"
+        xmlns:model="clr-namespace:Schedule.Model;assembly=Schedule.Model"
         mc:Ignorable="d"
-        Title="SystemAdministratorWindow" Height="450" Width="800">
+        Title="SystemAdministratorWindow" Height="700" Width="800">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="EventTypeEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="model:EventType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="DayOfWeekEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="System:DayOfWeek" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="UserRoleEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="model:Position" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <converters:UserNameConverter x:Key="UserNameConverter" />
+        <converters:GroupMembersConverter x:Key="GroupMembersConverter" />
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition MaxHeight="70" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition MaxWidth="200" />
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Events}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                <DataGridComboBoxColumn Header="Day" ItemsSource="{Binding Source={StaticResource DayOfWeekEnum}}" SelectedItemBinding="{Binding DayOfWeek, Mode=TwoWay}" />
+                <DataGridTextColumn Header="Order" Binding="{Binding Order}" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                <DataGridComboBoxColumn Header="Type" ItemsSource="{Binding Source={StaticResource EventTypeEnum}}" SelectedItemBinding="{Binding Type, Mode=TwoWay}" />
+                <DataGridTemplateColumn Header="Group" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SystemAdministratorWindow}}, Path=DataContext.Groups}" SelectedValue="{Binding Group, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Professor" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:SystemAdministratorWindow}}, Path=DataContext.Professors}" SelectedValue="{Binding Professor, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Users}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="First Name" Width="*" Binding="{Binding FirstName}" />
+                <DataGridTextColumn Header="Middle Name" Width="*" Binding="{Binding MiddleName}" />
+                <DataGridTextColumn Header="Last Name" Width="*" Binding="{Binding LastName}" />
+                <DataGridTextColumn Header="Email" Width="*" Binding="{Binding Email}" />
+                <DataGridTextColumn Header="Password" Width="*" Binding="{Binding Password}" />
+                <DataGridComboBoxColumn Header="Position" ItemsSource="{Binding Source={StaticResource UserRoleEnum}}" SelectedItemBinding="{Binding Position, Mode=TwoWay}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Groups}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedGroup}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Students" IsReadOnly="True" Binding="{Binding Students, Converter={StaticResource GroupMembersConverter}}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <controls:ProfileControl  Grid.Row="0" Grid.RowSpan="2" DataContext="{Binding SystemAdministrator}" Grid.Column="1" />
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ListBox ItemsSource="{Binding Students}" SelectedItem="{Binding SelectedStudent}" Grid.Row="1" Margin="10" />
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Command="{Binding AddStudentToGroup}" Margin="15">Add</Button>
+                <Button Command="{Binding RemoveStudentFromGroup}" Grid.Column="1" Margin="15">Remove</Button>
+            </Grid>
+        </Grid>
+        <Button Grid.Row="3" Grid.Column="0" Command="{Binding Save}">Save</Button>
+        <Button Grid.Row="3" Grid.Column="1" Command="{Binding Logout}">Logout</Button>
     </Grid>
 </Window>
