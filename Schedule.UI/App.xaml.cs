@@ -4,7 +4,6 @@ using System.Windows;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 using Schedule.Model;
 using Schedule.UI.Mapper;
 using Schedule.UI.Repositories;

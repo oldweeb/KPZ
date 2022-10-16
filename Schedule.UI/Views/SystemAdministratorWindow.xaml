@@ -28,7 +28,6 @@
         </ObjectDataProvider>
         <converters:UserNameConverter x:Key="UserNameConverter" />
         <converters:GroupMembersConverter x:Key="GroupMembersConverter" />
-        <converters:StudentsFromUsersConverter x:Key="StudentsFromUsersConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

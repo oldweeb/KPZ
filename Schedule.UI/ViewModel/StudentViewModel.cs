@@ -26,8 +26,8 @@ namespace Schedule.UI.ViewModel
         private GroupViewModel GetGroup()
         {
             Group group = _repository.GetGroups(g => g.Students.Any(s => s.Id == _user.Id))
-                .FirstOrDefault(new Group() { Id = -1, Name = "Lost Group" });
-            
+                .FirstOrDefault(new Group() {Id = -1, Name = "Lost Group"});
+
             return _mapper.Map<GroupViewModel>(group);
         }
 
