@@ -40,7 +40,17 @@
       "ProjectGuid": "5635ea4c-294a-47bb-a743-24b105a9aee7",
       "DisplayName": "Schedule.Model",
       "ColorIndex": 6
+    },
+    "aefdbb53-e354-4640-9dd0-f0667c896387": {
+      "ProjectGuid": "aefdbb53-e354-4640-9dd0-f0667c896387",
+      "DisplayName": "Lab3.CodeFirst",
+      "ColorIndex": 7
+    },
+    "05f7d394-eb09-410d-a1e3-400e9723d326": {
+      "ProjectGuid": "05f7d394-eb09-410d-a1e3-400e9723d326",
+      "DisplayName": "Lab3.DbFirst",
+      "ColorIndex": 8
     }
   },
-  "NextColorIndex": 7
+  "NextColorIndex": 9
 }

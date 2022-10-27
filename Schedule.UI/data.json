@@ -71,6 +71,15 @@
       "Position": 2,
       "Email": "tra@ta.com",
       "Password": "1234"
+    },
+    {
+      "Id": 9,
+      "FirstName": null,
+      "LastName": "ASDA",
+      "MiddleName": null,
+      "Position": 0,
+      "Email": "test",
+      "Password": "213"
     }
   ],
   "groups": [
@@ -329,6 +338,46 @@
       "Type": 2,
       "Name": "Music",
       "DayOfWeek": 3
+    },
+    {
+      "Id": 6,
+      "Order": 3,
+      "Professor": {
+        "Id": 3,
+        "FirstName": null,
+        "LastName": "Test",
+        "MiddleName": "Professorovych",
+        "Position": 0,
+        "Email": "test@test.com",
+        "Password": "lolkektratata"
+      },
+      "Group": {
+        "Id": 2,
+        "Students": [
+          {
+            "Id": 2,
+            "FirstName": null,
+            "LastName": "Tratatov",
+            "MiddleName": null,
+            "Position": 2,
+            "Email": "maksym.pavliv.pz.2020@lpnu.ua",
+            "Password": "ungabunga 2"
+          },
+          {
+            "Id": 7,
+            "FirstName": null,
+            "LastName": "Abobus",
+            "MiddleName": null,
+            "Position": 2,
+            "Email": "abobus@test.com",
+            "Password": "1234"
+          }
+        ],
+        "Name": "PZ-41"
+      },
+      "Type": 0,
+      "Name": "asdasdasdas",
+      "DayOfWeek": 2
     }
   ]
 }

@@ -25,7 +25,6 @@ public partial class App : Application
         Host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
             {
-                var json = File.ReadAllText(GlobalConfiguration.DataPath);
                 services.AddTransient<IRepository, HardCodedRepository>();
                 services.AddSingleton<IMapper>(Mapping.Create());
                 services.AddTransient<LoginWindow>();
