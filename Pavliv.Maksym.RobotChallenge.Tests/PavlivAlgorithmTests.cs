@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using NUnit.Framework;
 using Robot.Common;
 using CRobot = Robot.Common.Robot;

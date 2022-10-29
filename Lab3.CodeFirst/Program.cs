@@ -1,8 +1,15 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using Lab3.CodeFirst.DB;
+using Lab3.CodeFirst.Helpers;
 using Lab3.CodeFirst.Mapper;
+using Lab3.CodeFirst.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -12,10 +19,41 @@ var configuration = builder.Configuration;
 services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddSwaggerGen(config =>
+{
+    config.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme()
+    {
+        Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    config.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 services.AddDbContext<ScheduleDbContext>(o => o.UseSqlServer(configuration["ConnectionString"]));
 services.AddSingleton<IMapper>(Mapping.Create());
+services.AddScoped<ILoginService, LoginService>();
+services.AddScoped<IEventService, EventService>();
+services.AddScoped<IGroupService, GroupService>();
+services.AddSingleton<JwtTokenHelper>();
+
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidAudience = configuration["Jwt:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+        };
+    });
 
 var app = builder.Build();
 
@@ -28,8 +66,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHsts();
 
 app.Run();

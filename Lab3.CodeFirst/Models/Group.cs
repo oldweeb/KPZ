@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Lab3.CodeFirst.Models;
+﻿namespace Lab3.CodeFirst.Models;
 
 public class Group
 {

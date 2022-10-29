@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace Lab3.CodeFirst.DTOs
+namespace Lab3.CodeFirst.DTOs;
+
+public class GroupDto
 {
-    public class GroupDto
-    {
-        [JsonProperty("id")]
-        public Guid? Id { get; set; }
-        [JsonProperty("name")]
-        public string Name { get; set; }
-    }
+    [JsonProperty("id")]
+    public Guid? Id { get; set; }
+    [JsonProperty("name")]
+    public string Name { get; set; }
 }

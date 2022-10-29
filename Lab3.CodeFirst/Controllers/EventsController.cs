@@ -1,158 +1,140 @@
-﻿using System.Text.Json.Serialization;
-using AutoMapper;
-using Lab3.CodeFirst.DB;
+﻿using System.Security.Claims;
 using Lab3.CodeFirst.DTOs;
 using Lab3.CodeFirst.Models;
+using Lab3.CodeFirst.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace Lab3.CodeFirst.Controllers
+namespace Lab3.CodeFirst.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class EventsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EventsController : ControllerBase
+    private const string PositionClaimType = "position";
+    private const string IdClaimType = "user-id";
+    private readonly IEventService _service;
+
+    public EventsController(IEventService service)
     {
-        private readonly DbContext _context;
-        private readonly IMapper _mapper;
+        _service = service;
+    }
 
-        public EventsController(ScheduleDbContext context, IMapper mapper)
+    [Authorize]
+    [Route("{id}")]
+    [HttpGet]
+    public async Task<IActionResult> GetEventById(Guid id)
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            return Forbid();
         }
 
-        [Route("{id}")]
-        [HttpGet]
-        public async Task<IActionResult> GetEventById(Guid id)
+        Event? @event = await _service.GetEventById(id);
+        if (@event is null)
         {
-            Event? @event = await _context.FindAsync<Event>(id);
-            if (@event is null)
-            {
-                return NotFound();
-            }
-
-            return Ok(@event);
+            return NotFound($"Event with id {id} does not exist.");
         }
 
-        [Route("all")]
-        [HttpGet]
-        public IActionResult GetAllEvents()
+        return Ok(@event);
+    }
+
+    [Authorize]
+    [Route("all")]
+    [HttpGet]
+    public IActionResult GetAllEvents()
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
         {
-            var events = _context.Set<Event>();
-            return Ok(events.AsEnumerable());
+            return Forbid();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddEvent([FromBody, JsonProperty("event")] EventDto eventDto)
+        return Ok(_service.GetEvents());
+    }
+
+    [Authorize]
+    [Route("my")]
+    [HttpGet]
+    public IActionResult GetMyEvents()
+    {
+        Claim idClaim = HttpContext.User.Claims.First(c => c.Type == IdClaimType);
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var id = Guid.Parse(idClaim.Value);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+
+        try
         {
-            var @event = _mapper.Map<Event>(eventDto);
+            IQueryable<Event> events = _service.GetEventsForUser(id, position);
+            return Ok(events);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
-            User? user = await _context.FindAsync<User>(eventDto.ProfessorId);
-
-            if (user is null)
-            {
-                return BadRequest($"User with id {eventDto.ProfessorId} does not exist.");
-            }
-
-            if (user.Position is Position.Student or Position.SystemAdministrator)
-            {
-                return BadRequest($"Requested user is not of professor type.");
-            }
-
-            Group? group = await _context.FindAsync<Group>(eventDto.GroupId);
-            if (group is null)
-            {
-                return BadRequest($"Group with id {eventDto.GroupId} does not exist.");
-            }
-
-            @event.Professor = user;
-            @event.Group = group;
-
-            try
-            {
-                await _context.AddAsync(@event);
-                await _context.SaveChangesAsync();
-
-                return Accepted();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> AddEvent([FromBody, JsonProperty("event")] EventDto eventDto)
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
+        {
+            return Forbid();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateEvent([FromBody] EventDto eventDto)
+        try
         {
-            if (eventDto.Id is null)
-            {
-                return BadRequest("EventId must be included in the request.");
-            }
+            await _service.AddEvent(eventDto);
+            return Accepted();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
-            var @event = _mapper.Map<Event>(eventDto);
-
-            User? user = await _context.FindAsync<User>(eventDto.ProfessorId);
-
-            if (user is null)
-            {
-                return BadRequest($"User with id {eventDto.ProfessorId} does not exist.");
-            }
-
-            if (user.Position is Position.Student or Position.SystemAdministrator)
-            {
-                return BadRequest("Requested user is not of professor type.");
-            }
-
-            Group? group = await _context.FindAsync<Group>(eventDto.GroupId);
-            if (group is null)
-            {
-                return BadRequest($"Group with id {eventDto.GroupId} does not exist.");
-            }
-
-            @event.Professor = user;
-            @event.Group = group;
-
-            try
-            {
-                _context.Entry(@event).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+    [Authorize]
+    [HttpPut]
+    public async Task<IActionResult> UpdateEvent([FromBody, JsonProperty("event")] EventDto eventDto)
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
+        {
+            return Forbid();
         }
 
-        [Route("{id}/students")]
-        [HttpGet]
-        public async Task<IActionResult> GetStudents(Guid id)
+        try
         {
-            Event? @event = await _context.FindAsync<Event>(id);
-            if (@event is null)
-            {
-                return NotFound($"Event with id {id} does not exist.");
-            }
-
-            return Ok(@event.Group.Students);
-        }
-
-        [Route("{id}")]
-        [HttpDelete]
-        public async Task<IActionResult> DeleteStudent(Guid id)
-        {
-            Event? @event = await _context.FindAsync<Event>(id);
-            if (@event is null)
-            {
-                return NotFound($"Event with id {id} does not exist.");
-            }
-
-            _context.Entry(@event).State = EntityState.Deleted;
-            await _context.SaveChangesAsync();
-
+            await _service.UpdateEvent(eventDto);
             return Ok();
         }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
+    [Authorize]
+    [Route("{id}")]
+    [HttpDelete]
+    public async Task<IActionResult> DeleteEvent(Guid id)
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
+        {
+            return Forbid();
+        }
+
+        bool result = await _service.DeleteEvent(id);
+        return result ? Ok() : NotFound($"Event with id {id} does not exist.");
     }
 }

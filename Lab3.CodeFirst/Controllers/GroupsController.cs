@@ -1,112 +1,119 @@
-﻿using AutoMapper;
-using Lab3.CodeFirst.DB;
+﻿using System.Security.Claims;
 using Lab3.CodeFirst.DTOs;
 using Lab3.CodeFirst.Models;
+using Lab3.CodeFirst.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
-namespace Lab3.CodeFirst.Controllers
+namespace Lab3.CodeFirst.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class GroupsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class GroupsController : ControllerBase
+    private const string PositionClaimType = "position";
+    private readonly IGroupService _service;
+
+    public GroupsController(IGroupService groupService)
     {
-        private readonly DbContext _context;
-        private readonly IMapper _mapper;
+        _service = groupService;
+    }
 
-        public GroupsController(ScheduleDbContext context, IMapper mapper)
+    [Authorize]
+    [Route("{id}")]
+    [HttpGet]
+    public async Task<IActionResult> GetGroupById(Guid id)
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            return Forbid();
         }
 
-        [Route("{id}")]
-        [HttpGet]
-        public async Task<IActionResult> GetGroupById(Guid id)
+        Group? group = await _service.GetGroupById(id);
+
+        if (group is null)
         {
-            Group? group = await _context.FindAsync<Group>(id);
-
-            if (group is null)
-            {
-                return NotFound($"Group with id {id} does not exist.");
-            }
-
-            return Ok(group);
+            return NotFound($"Group with id {id} does not exist.");
         }
 
-        [Route("all")]
-        [HttpGet]
-        public IActionResult GetAllGroups()
+        return Ok(group);
+    }
+
+    [Authorize]
+    [Route("all")]
+    [HttpGet]
+    public IActionResult GetAllGroups()
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
         {
-            var groups = _context.Set<Group>();
-            return Ok(groups.AsEnumerable());
+            return Forbid();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddGroup([FromBody] GroupDto group)
+        var groups = _service.GetGroups();
+        return Ok(groups);
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> AddGroup([FromBody] GroupDto group)
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
         {
-            if (await _context.Set<Group>().FirstOrDefaultAsync(g => group.Name == g.Name) is not null)
-            {
-                return BadRequest($"Group with Name = {group.Name} already exists.");
-            }
+            return Forbid();
+        }
 
-            Group @new = _mapper.Map<Group>(group);
-            await _context.AddAsync(@new);
-            await _context.SaveChangesAsync();
-
+        try
+        {
+            await _service.AddGroup(group);
             return Accepted();
         }
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateGroup([FromBody, JsonProperty("group")] GroupDto groupDto)
+        catch (Exception ex)
         {
-            if (groupDto.Id is null)
-            {
-                return BadRequest("Request body must include id property.");
-            }
+            return BadRequest(ex.Message);
+        }
+    }
 
-            Group? group = await _context.FindAsync<Group>(groupDto.Id);
-            if (group is null)
-            {
-                return NotFound($"Group with id {groupDto.Id} does not exist.");
-            }
+    [Authorize]
+    [HttpPut]
+    public async Task<IActionResult> UpdateGroup([FromBody] GroupDto group)
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
+        {
+            return Forbid();
+        }
 
-            if (await _context.Set<Group>().AnyAsync(g => g.Id != groupDto.Id && g.Name.ToLower() == groupDto.Name.ToLower()))
-            {
-                return BadRequest($"There is already group with Name = {groupDto.Name}");
-            }
-
-            group.Name = groupDto.Name;
-            _context.Entry(group);
-            await _context.SaveChangesAsync();
+        try
+        {
+            await _service.UpdateGroup(group);
             return Ok();
         }
-
-        [Route("{id}/students")]
-        [HttpGet]
-        public async Task<IActionResult> GetGroupStudents(Guid id)
+        catch (Exception ex)
         {
-            Group? group = await _context.FindAsync<Group>(id);
-            if (group is null)
-            {
-                return NotFound($"Group with id {id} does not exist.");
-            }
+            return BadRequest(ex.Message);
+        }
+    }
 
-            return Ok(group.Students);
+    [Authorize]
+    [Route("{id}")]
+    [HttpDelete]
+    public async Task<IActionResult> DeleteGroup(Guid id)
+    {
+        Claim positionClaim = HttpContext.User.Claims.First(c => c.Type == PositionClaimType);
+        var position = (Position)Int32.Parse(positionClaim.Value);
+        if (!_service.ValidateWriteRights(position))
+        {
+            return Forbid();
         }
 
-        [Route("{id}")]
-        [HttpDelete]
-        public async Task<IActionResult> DeleteGroup(Guid id)
-        {
-            Group? group = await _context.FindAsync<Group>(id);
-            if (group is null)
-            {
-                return NotFound($"Group with id {id} does not exist.");
-            }
-
-            return Ok();
-        }
+        bool result = await _service.DeleteGroup(id);
+        return result ? Ok() : NotFound($"Group with id {id} does not exist.");
     }
 }
