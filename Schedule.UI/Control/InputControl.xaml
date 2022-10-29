@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Schedule.UI.Control.InputControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Schedule.UI.Control"
+             xmlns:converters="clr-namespace:Schedule.UI.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:AlignmentConverter x:Key="AlignmentConverter" />
+        <Style TargetType="{x:Type PasswordBox}">
+            <EventSetter Event="PasswordChanged" Handler="PasswordBox_OnPasswordChanged"></EventSetter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label Name="Label" Grid.Row="0" Content="{Binding LabelText, Mode=TwoWay}" VerticalAlignment="Bottom" />
+        <ContentControl Name="ContentControl" Grid.Row="1" Margin="5">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=Type}" Value="Text">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <TextBox TextAlignment="{Binding HorizontalTextAlignment}" Name="TextBox" Text="{Binding Input, Mode=TwoWay}" VerticalContentAlignment="{Binding VerticalTextAlignment}" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Type}" Value="Password">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <PasswordBox Name="PasswordBox" HorizontalContentAlignment="{Binding HorizontalTextAlignment, Converter={StaticResource AlignmentConverter}}" VerticalContentAlignment="{Binding VerticalTextAlignment}" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </Grid>
+</UserControl>
