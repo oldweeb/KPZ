@@ -1,0 +1,79 @@
+<app-header></app-header>
+<form #f="ngForm" novalidate (ngSubmit)="f.form.valid && update()">
+  <div class="form-container">
+    <div class="input-group">
+      <span class="input-group-text">Event</span>
+      <select name="event" class="form-select form-control" (change)="onChangeEvent($event)" [(ngModel)]="selectedId">
+        <option *ngFor="let event of events" [ngValue]="event.id" [value]="event.id">{{ event | eventName }}</option>
+      </select>
+    </div>
+    <div class="edit-container" *ngIf="selectedId !== null">
+      <div class="input-group mb-3">
+        <span class="input-group-text">Name</span>
+        <input type="text" class="form-control" placeholder="KPZ" [(ngModel)]="event.name" name="name" required
+          #name="ngModel" />
+        <div class="alert alert-danger" role="alert" *ngIf="f.submitted && name.errors && name.errors['required']">
+          <div>Name field is required</div>
+        </div>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="order">Order</span>
+        <input type="number" min="1" max="8" class="form-control" placeholder="" [(ngModel)]="event.order" name="order"
+          #order="ngModel" required />
+        <div class="alert alert-danger" role="alert" *ngIf="f.submitted && order.errors && order.errors['required']">
+          <div>Order field is required</div>
+        </div>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="professorId">Professor</span>
+        <select class="form-select form-control" [(ngModel)]="event.professorId" name="professorId" required
+          #professorId="ngModel">
+          <option *ngFor="let professor of availableProfessors" [ngValue]="professor.id">{{ professor | userName }}
+          </option>
+        </select>
+        <div class="alert alert-danger" role="alert"
+          *ngIf="f.submitted && professorId.errors && professorId.errors['required']">
+          <div>Professor field is required</div>
+        </div>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="">Group</span>
+        <select class="form-select form-control" [(ngModel)]="event.groupId" name="groupId" required #groupId="ngModel">
+          <option *ngFor="let group of availableGroups" [ngValue]="group.id">{{ group.name | uppercase }}</option>
+        </select>
+        <div class="alert alert-danger" role="alert"
+          *ngIf="f.submitted && groupId.errors && groupId.errors['required']">
+          <div>Group field is required</div>
+        </div>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="">Type</span>
+        <select class="form-select form-control" [(ngModel)]="event.type" name="type" required #type="ngModel">
+          <option *ngFor="let key of typeKeys" [ngValue]="+key">{{eventTypes[+key]}}</option>
+        </select>
+        <div class="alert alert-danger" role="alert" *ngIf="f.submitted && type.errors && type.errors['required']">
+          <div>Type field is required</div>
+        </div>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="">Day</span>
+        <select class="form-select form-control" [(ngModel)]="event.dayOfWeek" name="day" required #day="ngModel">
+          <option *ngFor="let key of dayKeys" [ngValue]="+key">{{days[+key]}}</option>
+        </select>
+        <div class="alert alert-danger" role="alert" *ngIf="f.submitted && day.errors && day.errors['required']">
+          <div>Name field is required</div>
+        </div>
+      </div>
+      <div class="input-group mb-3">
+        <button type="submit" class="btn btn-primary" style="width: 20vw">Update</button>
+      </div>
+      <div class="input-group mb-3">
+        <button class="input-group mb-3" type="button" class="btn btn-danger" style="width: 20vw"
+          (click)="delete()">Delete</button>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <button type="reset" class="btn btn-secondary" style="width: 20vw" (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+</form>

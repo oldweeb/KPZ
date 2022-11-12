@@ -1,0 +1,25 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  padding-top: 10vh;
+
+  .input-group {
+    min-width: 40vw;
+    max-width: 70vw;
+    display: flex;
+    justify-content: center;
+    padding-top: 5vh;
+  }
+
+  .edit-container {
+    min-width: 40vw;
+    max-width: 70vw;
+
+    .input-group {
+      margin-bottom: 5vh;
+    }
+  }
+}

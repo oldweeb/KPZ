@@ -1,0 +1,25 @@
+<app-header></app-header>
+<div class="table-container">
+  <table class="table table-stripped table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th>Day</th>
+        <th>Order</th>
+        <th>Name</th>
+        <th>Professor</th>
+        <th>Group</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let event of events">
+        <td>{{ event.dayOfWeek | dayName }}</td>
+        <td>{{ event.order }}</td>
+        <td>{{ event.name }}</td>
+        <td>{{ event.professor | userName }}</td>
+        <td>{{ event.group.name }}</td>
+        <td>{{ event.type | typeName }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

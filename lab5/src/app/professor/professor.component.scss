@@ -1,0 +1,29 @@
+.schedule-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100vw;
+
+  .button-container {
+    width: 12vw;
+
+    &:first-of-type {
+      padding-left: 2vw;
+    }
+
+    &:last-of-type {
+      padding-right: 2vw;
+    }
+
+    padding-top: 2vh;
+  }
+
+  .table-container {
+    width: 55vw;
+    padding: 2rem;
+  }
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

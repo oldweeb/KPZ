@@ -1,0 +1,64 @@
+<app-header></app-header>
+<form #f="ngForm" novalidate (ngSubmit)="f.form.valid && create()">
+  <div class="form-container">
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="first-name">First Name</span>
+      <input type="text" class="form-control" placeholder="e.g. Maksym" [(ngModel)]="user.firstName" name="firstName" />
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="middle-name">Middle Name</span>
+      <input type="text" class="form-control" placeholder="e.g. Yaroslavovych" [(ngModel)]="user.middleName"
+        name="middleName" />
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="last-name">Last Name</span>
+      <input type="text" class="form-control" placeholder="e.g. Pavliv" [(ngModel)]="user.lastName" name="lastName"
+        required #lastName="ngModel" />
+      <div class="alert alert-danger" role="alert" *ngIf="f.submitted && lastName.errors">
+        <div *ngIf="lastName.errors['required']">Last Name fields is required</div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="email">E-Mail</span>
+      <input type="text" class="form-control" placeholder="test@test.com" [(ngModel)]="user.email" #email="ngModel"
+        required name="email" />
+      <div class="alert alert-danger" role="alert" *ngIf="f.submitted && email.errors">
+        <div *ngIf="email.errors['required']">Email fields is required</div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="password">Password</span>
+      <input type="password" class="form-control" placeholder="12345678" [(ngModel)]="user.password" name="password"
+        required #password="ngModel" />
+      <div class="alert alert-danger" role="alert" *ngIf="f.submitted && password.errors">
+        <div *ngIf="password.errors['required']">Password field is required</div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="position">Position</span>
+      <select class="form-select form-control" [(ngModel)]="user.position" name="position" required #position="ngModel">
+        <option *ngFor="let key of keys" [ngValue]="+key">{{positions[+key]}}</option>
+      </select>
+      <div class="alert alert-danger" role="alert" *ngIf="f.submitted && position.errors">
+        <div *ngIf="position.errors['required']">Position field is required</div>
+      </div>
+    </div>
+    <div class="input-group mb-3" *ngIf="user.position === 2">
+      <span class="input-group-text" id="group">Group</span>
+      <select class="form-select form-control" [disabled]="user.position !== 2" [(ngModel)]="user.groupId"
+        name="groupId" #groupId="ngModel">
+        <option *ngFor="let group of availableGroups" [ngValue]="group.id">{{group.name}}
+        </option>
+      </select>
+      <div class="alert alert-danger" role="alert" *ngIf="f.submitted && !user.groupId">
+        <div>Group field is required if user is of type student</div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <button type="submit" class="btn btn-primary" style="width: 20vw">Submit</button>
+    </div>
+    <div class="input-group mb-3">
+      <button type="reset" class="btn btn-secondary" style="width: 20vw" (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+</form>

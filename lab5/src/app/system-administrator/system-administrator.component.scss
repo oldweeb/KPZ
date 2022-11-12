@@ -1,0 +1,14 @@
+.system-administrator-container {
+  .list-group-item {
+    border: none;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 10vh;
+
+  .btn {
+    width: 20vw;
+  }
+}

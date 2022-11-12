@@ -1,0 +1,19 @@
+<app-header></app-header>
+<form #f="ngForm" novalidate (ngSubmit)="f.form.valid && create()">
+  <div class="form-container">
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="name">Name</span>
+      <input type="text" class="form-control" placeholder="PZ-12" [(ngModel)]="group.name" name="name" required
+        #name="ngModel" />
+      <div class="alert alert-danger" role="alert" *ngIf="f.submitted && name.errors">
+        <div *ngIf="name.errors['required']">Name field is required</div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <button type="submit" class="btn btn-primary" style="width: 20vw">Submit</button>
+    </div>
+    <div class="input-group mb-3">
+      <button type="reset" class="btn btn-secondary" style="width: 20vw" (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+</form>

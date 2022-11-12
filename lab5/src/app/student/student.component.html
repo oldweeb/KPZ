@@ -1,0 +1,33 @@
+<div class="schedule-container">
+  <div class="button-container">
+    <button class="btn btn-primary btn-block" disabled *ngIf="day === 1">Previous Day</button>
+    <button class="btn btn-primary btn-block" (click)="previousDay()" *ngIf="day > 1">Previous Day</button>
+  </div>
+  <div class="table-container">
+    <table class="table table-stripped table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th style="width: 15%">Day</th>
+          <th style="width: 10%">Order</th>
+          <th style="width: 60%">Name</th>
+          <th style="width: 15%">Professor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of getEventsForDay()">
+          <td>{{ getFormattedDay() }}</td>
+          <td>{{ event.order }}</td>
+          <td>{{ event.name }}</td>
+          <td>{{ formatProfessorName(event) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="button-container">
+    <button class="btn btn-primary btn-block" disabled *ngIf="day === 6">Next Day</button>
+    <button class="btn btn-primary btn-block" (click)="nextDay()" *ngIf="day < 6">Next Day</button>
+  </div>
+  <div class="button-container">
+    <button class="btn btn-danger btn-block" (click)="logout()">Log Out</button>
+  </div>
+</div>

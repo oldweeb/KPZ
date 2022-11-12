@@ -1,0 +1,21 @@
+<app-header></app-header>
+<div class="table-container">
+  <table class="table table-stripped table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th>Name</th>
+        <th>Students</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let group of groups">
+        <td>{{ group.name }}</td>
+        <td>
+          <span *ngFor="let student of group.students">
+            {{ student | userName }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
