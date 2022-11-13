@@ -26,8 +26,8 @@ public class AuthController : ControllerBase
     {
         try
         {
-            string token = await _service.Login(login);
-            return Ok(new { Token = token });
+            var data = await _service.Login(login);
+            return Ok(new { Token = data.Item1, Position = data.Item2 });
         }
         catch (Exception ex)
         {

@@ -76,7 +76,8 @@ public class EventService : IEventService
     {
         if (position is Position.Student)
         {
-            return _events.Where(e => e.Group.Students.Any(s => s.Id == userId));
+            var user = _users.First(u => u.Id == userId);
+            return _events.Where(e => user.Group!.Id == e.Group.Id);
         }
 
         if (position is Position.Assistant or Position.Professor)

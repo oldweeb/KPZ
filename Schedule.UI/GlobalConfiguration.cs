@@ -2,6 +2,6 @@
 { 
     public static class GlobalConfiguration
     {
-        public const string DataPath = @"D:\studying\Labs\KPZ\Schedule.UI\data.json";
+        public const string DataPath = @"C:\Users\Admin\Desktop\KPZ-master\Schedule.UI\data.json";
     }
 }

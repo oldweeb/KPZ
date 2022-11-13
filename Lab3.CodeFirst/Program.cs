@@ -16,7 +16,7 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 // Add services to the container.
 
-services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(config =>
@@ -38,6 +38,10 @@ services.AddScoped<ILoginService, LoginService>();
 services.AddScoped<IEventService, EventService>();
 services.AddScoped<IGroupService, GroupService>();
 services.AddSingleton<JwtTokenHelper>();
+services.AddCors(c =>
+{
+    c.AddPolicy("AllowOrigin", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+});
 
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -63,6 +67,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(policyBuilder => policyBuilder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseHttpsRedirection();
 

@@ -24,7 +24,7 @@ public class LoginService : ILoginService
         _tokenHelper = helper;
     }
 
-    public async Task<string> Login(LoginDto login)
+    public async Task<Tuple<string, Position>> Login(LoginDto login)
     {
         login.Email = login.Email.Trim().ToLower();
         User? user =
@@ -35,7 +35,7 @@ public class LoginService : ILoginService
             throw new ArgumentException("Invalid credentials.");
         }
 
-        return _tokenHelper.GenerateToken(user);
+        return Tuple.Create(_tokenHelper.GenerateToken(user), user.Position);
     }
 
     public async Task CreateUser(UserDto data)

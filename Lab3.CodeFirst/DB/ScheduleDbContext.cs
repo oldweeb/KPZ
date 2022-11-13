@@ -33,6 +33,9 @@ public class ScheduleDbContext : DbContext
             eb.HasOne(e => e.Professor).WithMany();
 
             eb.HasOne(e => e.Group).WithMany();
+
+            eb.Navigation(e => e.Professor).AutoInclude();
+            eb.Navigation(e => e.Group).AutoInclude();
         });
 
         modelBuilder.Entity<Group>(gb =>
@@ -40,6 +43,8 @@ public class ScheduleDbContext : DbContext
             gb.HasKey(g => g.Id);
 
             gb.HasIndex(g => g.Name).IsUnique();
+
+            gb.Navigation(g => g.Students).AutoInclude();
         });
 
         base.OnModelCreating(modelBuilder);
